@@ -3,11 +3,31 @@
 import os
 import sys
 
+from dotenv import load_dotenv
+
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "src"))
+
+load_dotenv()
+
+
+def _get_configured_openai_api_key() -> str | None:
+    """Return a usable OpenAI API key or ``None`` if only a placeholder is set."""
+    api_key = os.getenv("OPENAI_API_KEY", "").strip()
+    if not api_key or api_key == "your_openai_api_key_here":
+        return None
+    return api_key
 
 
 def main() -> None:
-    api_key = os.getenv("OPENAI_API_KEY")
+    api_key = _get_configured_openai_api_key()
+    if sys.version_info >= (3, 14):
+        print(
+            "Python 3.14+ detected. The LangChain-based RSI agent in this project is not currently compatible with this Python version.\n"
+            "Running in demo mode (RSI calculator only, no LLM).\n"
+        )
+        _demo_calculator()
+        return
+
     if not api_key:
         print(
             "OPENAI_API_KEY environment variable not set.\n"

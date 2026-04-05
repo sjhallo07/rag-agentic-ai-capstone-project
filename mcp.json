@@ -1,0 +1,16 @@
+{
+    "mcpServers": {
+        "gradio-docs": {
+            "type": "streamable-http",
+            "url": "https://gradio-docs-mcp.hf.space/gradio_api/mcp/"
+        },
+        "gradio-docs-claude": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "mcp-remote@latest",
+                "https://gradio-docs-mcp.hf.space/gradio_api/mcp/"
+            ]
+        }
+    }
+}
