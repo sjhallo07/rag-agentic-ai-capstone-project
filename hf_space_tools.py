@@ -17,7 +17,7 @@ PROJECT_ROOT = Path(__file__).resolve().parent
 
 def _get_hf_token() -> str | None:
     """Return a configured Hugging Face token or ``None`` if unavailable."""
-    token = os.getenv("HF_TOKEN", "").strip()
+    token = os.getenv("HF_TOKEN", "").strip() or os.getenv("HF-TOKEN", "").strip()
     if not token or token == "your_hugging_face_token_here":
         return None
     return token
@@ -90,7 +90,9 @@ def create_or_update_space(space_name: str) -> str:
         ignore_patterns=["**/__pycache__", "**/*.pyc"],
     )
 
-    readme_path = PROJECT_ROOT / "README.md"
+    readme_path = PROJECT_ROOT / "SPACE_README.md"
+    if not readme_path.exists():
+        readme_path = PROJECT_ROOT / "README.md"
     if readme_path.exists():
         upload_file(
             path_or_fileobj=str(readme_path),
